@@ -1,0 +1,46 @@
+#不同产品的目录是不一样的，需要根据实际的情况调整这里
+include $(NGBILLING_SRC)/billing/MakeCommon
+NG_INC_DIR=$(NG_INC)/application/app_trt
+
+#引用的头文件，需要根据实际的情况进行调整
+USR_INCLUDE= -I./ \
+              -I$(NGBILLING_INCPATH)/foundation/library \
+              -I$(NGBILLING_INCPATH)/foundation/framework \
+              -I$(NGBILLING_INCPATH)/foundation/component \
+              -I$(NGBILLING_INCPATH)/foundation/compatibility \
+              $(MDB_INCLUDE) \
+               \
+               \
+              -I$(NGBILLING_INCPATH)/soos/zxfunc \
+              -I$(NGBILLING_INCPATH)/billing/application   \
+              -I$(NGBILLING_INCPATH)/billing/business   \
+              -I$(NGBILLING_INCPATH)/billing/combiz
+
+ 
+APP_LIB     =-L$(NGBILLING_LIBPATH)/  -lrating -lpricing -lzxplugin -lxml -lpricingtools -levsourcehelper -lshmdb \
+		-lshmconfig -lmdbcust -lmdbsd -lshmfile -lattr -llog -ldate -lstrdis -lalgorithm -lcomponent \
+		-lcompatibility -ltools -lfile -llibrary_sys -lroamctrlfile -leventattr $(NGLOG_LIBS) -lzxfunc -lperforassist -lhbcommon
+ 
+#开发人员自己定义的宏
+USR_FLAGS=-DSOOS_LOG_TEST -D_DBC_ORA_OR_INFO -D_DBC_MDB -D__RATING_MDBSUPPORT -D_DBC_TT
+
+#此处理开发人员不需要修改
+.SUFFIXES: .cpp .c
+.cpp.o:
+	$(CXX)  $(CXX_OPTIONS) $(MODE_FLAG) -o $@ -c $< $(ALL_FLAGS) $(ALL_INCLUDES) $(USR_FLAGS) $(USR_INCLUDE)
+.c.o:
+	$(CCC)  $(CCC_OPTIONS) $(MODE_FLAG) -o $@ -c $< $(ALL_FLAGS) $(ALL_INCLUDES) $(USR_FLAGS) $(USR_INCLUDE)
+
+
+SRCS         = trt.o
+
+
+#下面生成两种库只是为了给出一个例子，实际 zxfunc 只需要生成静态库
+STATIC_LIBRARY = 
+
+SHARE_LIBRARY = 
+
+OUTPUT =  trt
+
+include $(NGBILLING_SRC)/MakeCommon.cmd
+
